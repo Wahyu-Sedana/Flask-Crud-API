@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  db:
+    image: mariadb
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: 'db_articles'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    volumes:
+      - ./data/mysql/dbb:/var/lib/mysql
+      
+  app:
+    build: .
+    volumes:
+      - .:/api
+    ports:
+      - "3000:3000"
+    image: python:3.9 
+    container_name: flask_api
+    command: python app.py
+    depends_on:
+      - db
